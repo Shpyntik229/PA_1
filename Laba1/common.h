@@ -67,8 +67,18 @@ public:
 	{
 		m_condinmemcnt = cnt;
 	}
+	
+	inline void IncrementDeafCorner()
+	{
+		m_deafcount++;
+	}
+
+	inline std::size_t getDeafCorner()
+	{
+		return m_deafcount;
+	}
 private:
-	std::size_t m_itercnt = 0, m_time = 0, m_condcnt = 0, m_condinmemcnt;
+	std::size_t m_itercnt = 0, m_time = 0, m_condcnt = 0, m_condinmemcnt, m_deafcount = 0;
 	std::chrono::time_point<std::chrono::steady_clock> m_curtime;
 };
 

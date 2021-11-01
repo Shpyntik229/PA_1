@@ -14,6 +14,7 @@ static bool LDFS(Field& field, Coords empty, int depth = 0, Pos lastPos = Unknow
     if (depth > logger.getConditionsInMemoryCount()) logger.setConditionInMemoryCount(depth);
     if (depth == MAX_DEPTH) {
         logger.setConditionInMemoryCount(depth);
+        logger.IncrementDeafCorner();
         return false;
     }
     if (!isCorrect(field))

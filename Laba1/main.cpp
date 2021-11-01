@@ -30,7 +30,7 @@ int main()
 		if (sol1 != sol2) {
 			std::cerr << *sol1 << ' ' << *sol2 << " error!\n";
 		}
-		out << i + 1 << " condition\t" << logger_ldfs.getIterationCount() << '\t' << !sol1.has_value() << '\t'
+		out << i + 1 << " condition\t" << logger_ldfs.getIterationCount() << '\t' << logger_ldfs.getDeafCorner() << '\t'
 			<< logger_ldfs.getConditionsCount() << '\t' << logger_ldfs.getConditionsInMemoryCount() << '\t' << logger_ldfs.getTime() / 1e3 << "ms\t\t"
 			<< logger_rbfs.getIterationCount() << '\t' << !sol2.has_value() << '\t'
 			<< logger_rbfs.getConditionsCount() << '\t' << logger_rbfs.getConditionsInMemoryCount() << '\t' << logger_rbfs.getTime() / 1e3 << "ms\n";
