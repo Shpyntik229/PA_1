@@ -66,9 +66,10 @@ optional<int> puzzle8SolveLDFS(Field field, Logger& logger) {
     }
     //path.resize(LDFS_res + 1);
     //auto res = path;
-    //LDFS_res = 100;
+    int res = LDFS_res;
+    LDFS_res = MAX_DEPTH + 1;
     //path.resize(MAX_DEPTH);
     ::logger.stopTimer();
     logger = ::logger;
-    return LDFS_res;
+    return res;
 }
