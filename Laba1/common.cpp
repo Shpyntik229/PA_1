@@ -19,3 +19,12 @@ Coords find_empty(const Field& field) {
     }
     return { -1, -1 };
 }
+
+void decrementEachValue(Field& field) {
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++) {
+            field[i][j]--;
+        }
+    }
+}

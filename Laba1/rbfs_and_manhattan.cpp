@@ -12,7 +12,7 @@ bool isSolved(const Field& field) {
 	int inversions = 0;
 	for (int i = 0; i < 8; i++) {
 		for (int j = i + 1; j < 9; j++) {
-			if (field[i / 3][i % 3] != -1 && field[j / 3][j % 3] && field[i / 3][i % 3] > field[j / 3][j % 3]) {
+			if (field[i / 3][i % 3] != -1 && field[j / 3][j % 3] != -1 && field[i / 3][i % 3] > field[j / 3][j % 3]) {
 				inversions++;
 			}
 		}
@@ -34,6 +34,7 @@ int g(const Field& field) {
 
 static thread_local int result = -1;
 //static thread_local map<Field, int> checker;
+static thread_local Logger logger;
 
 int f(Field field, Coords empty, int depth, Pos dir) {
 	if (dir == Up) {
@@ -71,6 +72,7 @@ int RBFS(Field& field, Coords empty, int depth = 0, int f_value = MAX_F_VALUE) {
 		cout << "\n";
 	}
 	cout << endl;*/
+	if (depth > logger.getConditionsInMemoryCount()) logger.setConditionInMemoryCount(depth);
 	int g_value = g(field);
 	if (g_value == 0) {
 		result = depth;
@@ -99,6 +101,7 @@ int RBFS(Field& field, Coords empty, int depth = 0, int f_value = MAX_F_VALUE) {
 			second = Right;
 		}
 		while (true) {
+			logger.IncrementIterationCounter();
 			minimum = second_min;
 			first = second;
 			second = Unknown;
@@ -123,24 +126,28 @@ int RBFS(Field& field, Coords empty, int depth = 0, int f_value = MAX_F_VALUE) {
 
 			switch (first) {
 			case Up:
+				logger.IncrementConditionCount();
 				swap(field[empty.i][empty.j], field[empty.i - 1][empty.j]);
 				up = RBFS(field, { empty.i - 1, empty.j }, depth + 1, min(f_value, second_min));
 				swap(field[empty.i][empty.j], field[empty.i - 1][empty.j]);
 				if (!up) return 0;
 				break;
 			case Down:
+				logger.IncrementConditionCount();
 				swap(field[empty.i][empty.j], field[empty.i + 1][empty.j]);
 				down = RBFS(field, { empty.i + 1, empty.j }, depth + 1, min(f_value, second_min));
 				swap(field[empty.i][empty.j], field[empty.i + 1][empty.j]);
 				if (!down) return 0;
 				break;
 			case Left:
+				logger.IncrementConditionCount();
 				swap(field[empty.i][empty.j], field[empty.i][empty.j - 1]);
 				left = RBFS(field, { empty.i, empty.j - 1 }, depth + 1, min(f_value, second_min));
 				swap(field[empty.i][empty.j], field[empty.i][empty.j - 1]);
 				if (!left) return 0;
 				break;
 			case Right:
+				logger.IncrementConditionCount();
 				swap(field[empty.i][empty.j], field[empty.i][empty.j + 1]);
 				right = RBFS(field, { empty.i, empty.j + 1 }, depth + 1, min(f_value, second_min));
 				swap(field[empty.i][empty.j], field[empty.i][empty.j + 1]);
@@ -151,9 +158,13 @@ int RBFS(Field& field, Coords empty, int depth = 0, int f_value = MAX_F_VALUE) {
 	}
 }
 
-optional<int> puzzle8SolveRBFS(Field field)
+optional<int> puzzle8SolveRBFS(Field field, Logger& logger)
 {
+	decrementEachValue(field);
 	if (!isSolved(field)) return nullopt;
+	::logger.startTimer();
 	RBFS(field, find_empty(field));
+	::logger.stopTimer();
+	logger = ::logger;
 	return result;
 }

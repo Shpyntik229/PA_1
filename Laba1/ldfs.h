@@ -4,4 +4,4 @@
 
 #include "common.h"
 
-std::optional<std::vector<Field>> puzzle8SolveLDFS(Field field);
+std::optional<int> puzzle8SolveLDFS(Field field, Logger& logger);
